@@ -27,7 +27,7 @@ http {
 	client_body_timeout 5;
 
 	upstream app_server {
-		server unix:/tmp/nginx.socket fail_timeout=0;
+		server <%= ENV['NGINX_UPSTREAM'] || 'unix:/tmp/nginx.socket'%>;
  	}
 
 	server {
@@ -35,9 +35,9 @@ http {
 		server_name _;
 		keepalive_timeout 5;
 
-		root /app/public;
+		root <%= ENV['NGINX_ROOT'] || '/app/public' %>;
 
-		location / {
+		location <%= ENV['NGINX_LOCATION'] || '/' %> {
 			try_files $uri @proxy;
 		}
 
